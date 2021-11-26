@@ -1,0 +1,45 @@
+body{
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+.table 
+{
+    margin: auto;
+    text-align: center;
+}
+img{
+    height: 90%;
+    width: 90%;
+}
+td{
+    border: 2px solid black;
+    padding: 5px;
+}
+.tdl{
+    width: 40%;
+    height: 20px;
+}
+input[type="button"]{
+    width: 90%;
+    background-color: white;
+    border-radius: 2px;
+    border: 2px solid black;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+
+}
+
+input[id="knows"]:hover{
+    background-color: rgb(131, 199, 131);
+    color: aliceblue;
+}
+
+input[id="notknows"]:hover{
+    background-color: red;
+    color: aliceblue;
+}
+
+.width{
+    width: 41.7%;
+}
+.center{
+    text-align: center;
+}

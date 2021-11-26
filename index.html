@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./main.css">
+    <script src="./main.js"></script>
+    <title>Survey App</title>
+</head>
+
+<body>
+    <div class="center">
+        <h1>Vadapav Survey </h1>
+        <div>
+            <table class="table">
+                <tr>
+                    <td colspan="2"><img src="./vadapav.png" alt="Vada Pav"></td>
+                </tr>
+                <tr>
+                    <td class="tdl"><label>Known</label></td>
+                    <td><input type="button" id="knows" onclick="knowsCount()" value="Known"></td>
+                </tr>
+                <tr>
+                    <td><label>Not Known</label></td>
+                    <td><input type="button" id="notknows" onclick="notKnowsCount()" value="Not Known"></td>
+                </tr>
+                <tr>
+                    <td><label>Known Count</label></td>
+                    <td><label id="knownCount" >0</label></td>
+                </tr>
+                <tr>
+                    <td><label>Not Known Count</label></td>
+                    <td><label id="notKnownCount">0</label></td>
+                </tr>
+                <tr>
+                    <td><label>Total Count</label></td>
+                    <td><label id="totalCount">0</label></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</body>
+
+</html>
