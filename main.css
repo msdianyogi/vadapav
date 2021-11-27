@@ -37,6 +37,11 @@ input[id="notknows"]:hover{
     color: aliceblue;
 }
 
+input[id="savedata"]:hover{
+    background-color: yellowgreen;
+    color: aliceblue;
+}
+
 .width{
     width: 41.7%;
 }

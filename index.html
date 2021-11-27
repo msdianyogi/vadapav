@@ -26,6 +26,9 @@
                     <td><input type="button" id="notknows" onclick="notKnowsCount()" value="Not Known"></td>
                 </tr>
                 <tr>
+                    <td colspan="2"><input type="button" id="savedata" value="Save Data"></td>
+                </tr>
+                <tr>
                     <td><label>Known Count</label></td>
                     <td><label id="knownCount">0</label></td>
                 </tr>
@@ -41,24 +44,65 @@
         </div>
     </div>
 </body>
+<script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.5.0/firebase-app.js";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
 
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyClnwGaRs9rok8Gc1BgQ7qdNnnfIkoYPsk",
+        authDomain: "vadapav-survey.firebaseapp.com",
+        databaseURL: "https://vadapav-survey-default-rtdb.firebaseio.com",
+        projectId: "vadapav-survey",
+        storageBucket: "vadapav-survey.appspot.com",
+        messagingSenderId: "416588479903",
+        appId: "1:416588479903:web:1592398272643ef86711aa"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+
+    import { getDatabase, ref, get, set, child, update, remove }
+        from "https://www.gstatic.com/firebasejs/9.5.0/firebase-database.js";
+
+    const db = getDatabase();
+
+    function UpdateData() {
+        set(ref(db,"Survey/"), {
+            knownCount: document.getElementById("knownCount").innerHTML,
+            notKnownCount: document.getElementById("notKnownCount").innerHTML
+        })
+        .then(() => {
+            alert("Data Updated Successfully..!")
+        })
+        .catch((error) => {
+            alert("Error Occured ," + error)
+        });
+    }
+    savebutton.addEventListener("click", UpdateData);
+</script>
 <script>
-    var knownCount = 0;
-    var notKnownCount = 0;
-    var totalCount = 0;
+    var savebutton = document.getElementById("savedata");
+    
+    const data = {
+        "knownCount": 0,
+        "notKnownCount": 0
+    };
 
     function knowsCount() {
-        knownCount += 1;
-        totalCount = knownCount + notKnownCount;
+        data["knownCount"] += 1;
+        totalCount = data["knownCount"] + data["notKnownCount"];
 
-        document.getElementById("knownCount").innerHTML = knownCount;
+        document.getElementById("knownCount").innerHTML = data["knownCount"];
         document.getElementById("totalCount").innerHTML = totalCount;
     }
     function notKnowsCount() {
-        notKnownCount += 1;
-        totalCount = knownCount + notKnownCount;
+        data["notKnownCount"] += 1;
+        totalCount = data["knownCount"] + data["notKnownCount"];
 
-        document.getElementById("notKnownCount").innerHTML = notKnownCount;
+        document.getElementById("notKnownCount").innerHTML = data["notKnownCount"];
         document.getElementById("totalCount").innerHTML = totalCount;
     }
 </script>
