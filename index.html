@@ -9,7 +9,7 @@
     <title>Survey App</title>
 </head>
 
-<body>
+<body onload="onLoadFunction">
     <div class="center">
         <h1>Vadapav Survey </h1>
         <div>
@@ -19,26 +19,29 @@
                 </tr>
                 <tr>
                     <td class="tdl"><label>Known</label></td>
-                    <td><input type="button" id="knows" onclick="knowsCount()" value="Known"></td>
+                    <td><input type="button" id="knows" onclick="knowsCount()" value="Known" disabled></td>
                 </tr>
                 <tr>
                     <td><label>Not Known</label></td>
-                    <td><input type="button" id="notknows" onclick="notKnowsCount()" value="Not Known"></td>
+                    <td><input type="button" id="notknows" onclick="notKnowsCount()" value="Not Known" disabled></td>
                 </tr>
                 <tr>
-                    <td colspan="2"><input type="button" id="savedata" value="Save Data"></td>
+                    <td colspan="2"><input type="button" id="savedata" value="Save Data" disabled></td>
                 </tr>
+                <!-- <tr>
+                    <td colspan="2"><input type="button" id="getdata" value="Get Data"></td>
+                </tr> -->
                 <tr>
                     <td><label>Known Count</label></td>
-                    <td><label id="knownCount">0</label></td>
+                    <td><label id="knownCount">loading...</label></td>
                 </tr>
                 <tr>
                     <td><label>Not Known Count</label></td>
-                    <td><label id="notKnownCount">0</label></td>
+                    <td><label id="notKnownCount">loading...</label></td>
                 </tr>
                 <tr>
                     <td><label>Total Count</label></td>
-                    <td><label id="totalCount">0</label></td>
+                    <td><label id="totalCount">loading...</label></td>
                 </tr>
             </table>
         </div>
@@ -68,41 +71,63 @@
         from "https://www.gstatic.com/firebasejs/9.5.0/firebase-database.js";
 
     const db = getDatabase();
-
     function UpdateData() {
-        set(ref(db,"Survey/"), {
+        set(ref(db, "Survey/"), {
             knownCount: document.getElementById("knownCount").innerHTML,
             notKnownCount: document.getElementById("notKnownCount").innerHTML
         })
-        .then(() => {
-            alert("Data Updated Successfully..!")
-        })
-        .catch((error) => {
+            .then(() => {
+                alert("Data Updated Successfully..!");
+                window.location.reload();
+            })
+            .catch((error) => {
+                alert("Error Occured ," + error);
+            });
+    }
+    function GetData() {
+        const dbref = ref(db);
+        get(child(dbref, "Survey/")).then((snapshot) => {
+            if (snapshot.exists()) {
+                document.getElementById("knownCount").innerHTML = snapshot.val().knownCount;
+                document.getElementById("notKnownCount").innerHTML = snapshot.val().notKnownCount;
+                kcount = Number(snapshot.val().knownCount)
+                kncount = Number(snapshot.val().notKnownCount);
+                document.getElementById("totalCount").innerHTML = Number(snapshot.val().knownCount) + Number(snapshot.val().notKnownCount);
+                document.getElementById("knows").removeAttribute("disabled");
+                document.getElementById("notknows").removeAttribute("disabled");
+                document.getElementById("savedata").removeAttribute("disabled");
+            }
+            else {
+                alert("No Data Found");
+            }
+        }).catch((error) => {
             alert("Error Occured ," + error)
-        });
+        })
     }
     savebutton.addEventListener("click", UpdateData);
+    onLoadFunction = GetData();
+
 </script>
 <script>
     var savebutton = document.getElementById("savedata");
-    
-    const data = {
-        "knownCount": 0,
-        "notKnownCount": 0
-    };
+    var onLoadFunction;
+
+    var kcount;
+    var kncount;
+    var totalcount;
 
     function knowsCount() {
-        data["knownCount"] += 1;
-        totalCount = data["knownCount"] + data["notKnownCount"];
+        kcount += 1
+        totalCount = kcount + kncount;
 
-        document.getElementById("knownCount").innerHTML = data["knownCount"];
+        document.getElementById("knownCount").innerHTML = kcount;
         document.getElementById("totalCount").innerHTML = totalCount;
     }
     function notKnowsCount() {
-        data["notKnownCount"] += 1;
-        totalCount = data["knownCount"] + data["notKnownCount"];
+        kncount += 1
+        totalCount = kcount + kncount;
 
-        document.getElementById("notKnownCount").innerHTML = data["notKnownCount"];
+        document.getElementById("notKnownCount").innerHTML = kncount;
         document.getElementById("totalCount").innerHTML = totalCount;
     }
 </script>
