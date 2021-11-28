@@ -6,12 +6,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>Survey App</title>
 </head>
 
-<body onload="onLoadFunction">
+<body onload="onLoadFunction;marqueeSpace()">
     <div class="center">
-        <h1>Vadapav Survey </h1>
+        <h1>
+            <marquee id="marquee" behavior="alternate" scrollamount="5" hspace="20%">Vadapav Awareness Survey</marquee>
+        </h1>
         <div>
             <table class="table">
                 <tr>
@@ -26,22 +29,43 @@
                     <td><input type="button" id="notknows" onclick="notKnowsCount()" value="Not Known" disabled></td>
                 </tr>
                 <tr>
-                    <td colspan="2"><input type="button" id="savedata" value="Save Data" disabled></td>
-                </tr>
-                <!-- <tr>
-                    <td colspan="2"><input type="button" id="getdata" value="Get Data"></td>
-                </tr> -->
-                <tr>
                     <td><label>Known Count</label></td>
-                    <td><label id="knownCount">loading...</label></td>
+                    <td>
+                        <label id="knownCount">
+                            <i class="fa fa-refresh fa-spin" style="font-size:24px"></i>
+                        </label>
+                    </td>
                 </tr>
                 <tr>
                     <td><label>Not Known Count</label></td>
-                    <td><label id="notKnownCount">loading...</label></td>
+                    <td><label id="notKnownCount">
+                            <i class="fa fa-refresh fa-spin" style="font-size:24px"></i>
+                        </label></td>
                 </tr>
                 <tr>
                     <td><label>Total Count</label></td>
-                    <td><label id="totalCount">loading...</label></td>
+                    <td><label id="totalCount">
+                            <i class="fa fa-refresh fa-spin" style="font-size:24px"></i>
+                        </label></td>
+                </tr>
+                <tr>
+                    <td><label>Known Percentage</label></td>
+                    <td><label id="knownpercentage">
+                            <i class="fa fa-refresh fa-spin" style="font-size:24px"></i>
+                        </label></td>
+                </tr>
+                <tr>
+                    <td><label>Not Known Percentage</label></td>
+                    <td><label id="notKnownPercentage">
+                            <i class="fa fa-refresh fa-spin" style="font-size:24px"></i>
+                        </label></td>
+                </tr>
+                <tr>
+                    <td><label>Whether To Start Business?</label></td>
+                    <td><label id="decision">
+                            <i class="fa fa-refresh fa-spin" style="font-size:24px"></i>
+                        </label>
+                    </td>
                 </tr>
             </table>
         </div>
@@ -92,10 +116,33 @@
                 document.getElementById("notKnownCount").innerHTML = snapshot.val().notKnownCount;
                 kcount = Number(snapshot.val().knownCount)
                 kncount = Number(snapshot.val().notKnownCount);
+                var decisionKnown = (((Number(snapshot.val().knownCount) / (Number(snapshot.val().knownCount) + Number(snapshot.val().notKnownCount))) * 100).toPrecision(4))
+                var decisionnotKnown = (((Number(snapshot.val().notKnownCount) / (Number(snapshot.val().knownCount) + Number(snapshot.val().notKnownCount))) * 100).toPrecision(4))
+
                 document.getElementById("totalCount").innerHTML = Number(snapshot.val().knownCount) + Number(snapshot.val().notKnownCount);
+                if(decisionKnown == "NaN"){
+                    document.getElementById("knownpercentage").innerHTML = "0 %";
+                }
+                else{
+                    document.getElementById("knownpercentage").innerHTML = (((Number(snapshot.val().knownCount) / (Number(snapshot.val().knownCount) + Number(snapshot.val().notKnownCount))) * 100).toPrecision(4)).toString() + " %";
+                }
+                if(decisionnotKnown == "NaN"){
+                    document.getElementById("notKnownPercentage").innerHTML = "0 %";
+                }
+                else{
+                    document.getElementById("notKnownPercentage").innerHTML = (((Number(snapshot.val().notKnownCount) / (Number(snapshot.val().knownCount) + Number(snapshot.val().notKnownCount))) * 100).toPrecision(4)).toString() + " %";
+                }
                 document.getElementById("knows").removeAttribute("disabled");
                 document.getElementById("notknows").removeAttribute("disabled");
-                document.getElementById("savedata").removeAttribute("disabled");
+
+                if (decisionKnown >= 40.00) {
+                    document.getElementById("decision").innerHTML = "Yes";
+                    document.getElementById("decision").setAttribute("class", "yes");
+                }
+                else {
+                    document.getElementById("decision").innerHTML = "No";
+                    document.getElementById("decision").setAttribute("class", "no");
+                }
             }
             else {
                 alert("No Data Found");
@@ -104,12 +151,14 @@
             alert("Error Occured ," + error)
         })
     }
-    savebutton.addEventListener("click", UpdateData);
+    knownButton.addEventListener("click", UpdateData);
+    notKnownButton.addEventListener("click", UpdateData);
     onLoadFunction = GetData();
 
 </script>
 <script>
-    var savebutton = document.getElementById("savedata");
+    var knownButton = document.getElementById("knows");
+    var notKnownButton = document.getElementById("notknows");
     var onLoadFunction;
 
     var kcount;
@@ -129,6 +178,13 @@
 
         document.getElementById("notKnownCount").innerHTML = kncount;
         document.getElementById("totalCount").innerHTML = totalCount;
+    }
+    function marqueeSpace() {
+        var screen = window.matchMedia("(max-width: 480px)")
+
+        if (screen.matches) { // If media query matches
+            document.getElementById("marquee").removeAttribute("hspace");
+        }
     }
 </script>
 

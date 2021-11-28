@@ -5,6 +5,7 @@ body{
 {
     margin: auto;
     text-align: center;
+    margin-top: 8px;
 }
 img{
     height: 90%;
@@ -42,9 +43,24 @@ input[id="savedata"]:hover{
     color: aliceblue;
 }
 
+.center{
+    text-align: center;
+}
+
 .width{
     width: 41.7%;
 }
-.center{
-    text-align: center;
+
+h1{
+    font-size: 20px;
+    font-family: Verdana, Tahoma, sans-serif;
+    border: 2px solid black;
+    padding: 5px;
+    margin: auto;
+}
+.no{
+    color: red;
+}
+.yes{
+    color: green;
 }
